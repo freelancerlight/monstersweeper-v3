@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            #Scene {
+                font-family: "Courier New", Courier, monospace;
+            }
+        </style>
+        <title>Monstersweeper</title>
+    </head>
+    <body>
+        <p id="Scene"><b>Monstersweeper (v3.0a)</b></p>
+        <p id="HUD">Press "`" to open the game menu.</p>
+    </body>
+    <script>
+        let dev = 0, game_state = 1
+        const setting_playerControls = ["a", "d", "s", "w", "o", "[", "k", "p"]
+        const settings_gameColors = ["#a0a0a0", "#000000"]
+
+        //const Test = {test1:2, test2:4}
+        //console.log(Object.keys(Test).find(key => Test[key] === Test.test1));
+
+        /*function programLog(programLog_name, programLog_variable) {
+            if (typeof programLog_variable == "object") {} else {console.log(programLog_name + ": " + programLog_variable)}
+        }*/
+        
+        function playerKeyCheck(playerKeyCheck_key) {if (event.key == playerKeyCheck_key) {return true} else {return false}};
+        function changeSceneColor(changeSceneColor_i) {
+            document.getElementById("Scene").style.color = settings_gameColors[changeSceneColor_i];
+            console.log(settings_gameColors[changeSceneColor_i]);
+        };
+
+        window.addEventListener("keydown", function (event) {
+            /*Toggle Dev*/ if (playerKeyCheck("=")) {
+                if (dev) {dev = 0} else {dev = 1};
+                console.log(dev + ": " + dev)
+            };
+            if (game_state) {
+                /*Pause Game*/ if (playerKeyCheck("`")) {game_state = 0; changeSceneColor(0)};
+            } else {
+                /*Unpause Game*/ if (playerKeyCheck("`")) {game_state = 1; changeSceneColor(1)};
+            };
+        });
+    </script>
+</html>
