@@ -16,12 +16,13 @@
     <script>
         let dev = 0, game_state = 1
         const setting_playerControls = ["a", "d", "s", "w", "o", "[", "k", "p"]
-        const settings_gameBackgroundColors = ["#000000", "#606060"]
+        const settings_gameBackgroundColors = ["#000000", "#606060", null, "#404040"]
         const settings_gameColors = [null, "#ffffff", "#808080", "#ffffff"]
 
         changeColor(true, "Main", 0)
         changeColor(false, "Scene", 1)
         changeColor(true, "Scene", 1)
+        changeColor(true, "HUD", 3)
         changeColor(false, "HUD", 3)
         
         function playerKeyCheck(playerKeyCheck_key) {if (event.key == playerKeyCheck_key) {return true} else {return false}};
@@ -40,28 +41,18 @@
                 console.log("dev" + ": " + dev)
             };
             //Finish this later!
-            function changeGameState () {
+            function changeGameState(changeGameState_v) {
                 if (playerKeyCheck("`")) {
-                    game_state = 0;
+                    game_state = changeGameState_v;
                     console.log("game_state: " + game_state);
                     
-                    changeColor(false, "Scene", 2);
+                    changeColor(false, "Scene", 2 - game_state);
                 };
             }
             if (game_state) {
-                /*Pause Game*/ if (playerKeyCheck("`")) {
-                    game_state = 0;
-                    console.log("game_state: " + game_state);
-                    
-                    changeColor(false, "Scene", 2);
-                };
+                changeGameState(0)
             } else {
-                /*Unpause Game*/ if (playerKeyCheck("`")) {
-                    game_state = 1;
-                    console.log("game_state: " + game_state);
-                    
-                    changeColor(false, "Scene", 1)
-                };
+                changeGameState(1)
             };
         });
     </script>
