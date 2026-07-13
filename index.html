@@ -14,7 +14,7 @@
         <p id="HUD">Press "`" to open the game menu.</p>
     </body>
     <script>
-        let dev = 0, game_state = 1, gameMenu_i = 1
+        let dev = 0, game_state = 1, menu_i = 0
         const setting_playerControls = ["a", "d", "s", "w", "o", "[", "k", "p"];
         const settings_gameBackgroundColors = ["#000000", "#606060", null, "#404040"];
         const settings_gameColors = [null, "#ffffff", "#808080", "#ffffff"];
@@ -33,10 +33,16 @@
             console.log("changeColor_background: " + changeColor_background + ", changeColor_v: " + changeColor_v + ", changeColor_i: " + settings_gameColors[changeColor_i]);
         };
 
+        function getVName(getVName_v) {return Object.keys({getVName_v})[0]}
+        function programLog(programLog_name, programLog_v) {
+            let ProgramLog = {}
+            for (let i_programLog = 0; i_programLog < programLog_name.length; i_programLog++) {ProgramLog[programLog_name[i_programLog]] = programLog_v[i_programLog]};
+            console.log(ProgramLog);
+        };
+
         function changeText(changeText_type, changeText_name, changeText_v) {
             if (changeText_type) {document.getElementById(changeText_name).innerHTML += changeText_v} else {document.getElementById(changeText_name).innerHTML += changeText_v};
-            console.log(Object.keys({changeText_type})[0] + )
-            //Revisit it later
+            programLog([getVName(changeText_type), getVName(changeText_name), getVName(changeText_v)], [changeText_type, changeText_name, changeText_v])
         }
 
         function gameMenuIncrease(gameMenuIncrease_v) {return Math.pow(10, gameMenu_i.toString().length) * gameMenuIncrease_v};
