@@ -33,7 +33,7 @@
             console.log("changeColor_background: " + changeColor_background + ", changeColor_v: " + changeColor_v + ", changeColor_i: " + settings_gameColors[changeColor_i]);
         };
 
-        function getVName(getVName_v) {return Object.keys({getVName_v})[0]}
+        //function getVName(getVName_v) {return Object.keys({getVName_v})[0]};
         function programLog(programLog_name, programLog_v) {
             let ProgramLog = {}
             for (let i_programLog = 0; i_programLog < programLog_name.length; i_programLog++) {ProgramLog[programLog_name[i_programLog]] = programLog_v[i_programLog]};
@@ -41,23 +41,26 @@
         };
 
         function changeText(changeText_type, changeText_name, changeText_v) {
-            if (changeText_type) {document.getElementById(changeText_name).innerHTML += changeText_v} else {document.getElementById(changeText_name).innerHTML += changeText_v};
-            programLog([getVName(changeText_type), getVName(changeText_name), getVName(changeText_v)], [changeText_type, changeText_name, changeText_v])
+            if (changeText_type) {document.getElementById(changeText_name).innerHTML += changeText_v} else {document.getElementById(changeText_name).innerHTML = changeText_v};
+            programLog(["changeText_type", "changeText_name", "changeText_v"], [changeText_type, changeText_name, changeText_v])
         }
+
+        changeText(0, "HUD", "")
 
         function gameMenuIncrease(gameMenuIncrease_v) {return Math.pow(10, gameMenu_i.toString().length) * gameMenuIncrease_v};
         function gameMenuDecrease() {return Math.pow(10, gameMenu_i.toString().length - 1) * gameMenu_i.toString().charAt(0)};
+        function gameMenuCheck(gameMenuCheck_v) {GameMenu.find(e => e.id === gameMenuCheck_v)}
         function changeGameMenu() {
             
         }
-        function gameMenu(_gameMenuI) {
-            if (_gameMenuI == -1) { 
+        function gameMenu(gameMenu_i) {
+            if (gameMenu_i == -1) { 
                 gameMenu_i = 0;
-            } else if (_gameMenuI == 0) { 
-                gameMenuDecrease()
+            } else if (gameMenu_i == 0) { 
+                menu_i -= gameMenuDecrease();
             } else {
-                const i_gameMenu = Math.pow(10, gameMenu_i.toString().length) * _gameMenuI;
-                if (GameMenu.find(e => e.id === gameMenu_i + i_gameMenu)) {
+                const i_gameMenu = gameMenuIncrease(gameMenu_i);
+                if (gameMenuCheck(gameMenu_i + i_gameMenu)) {
                     gameMenu_i += i_gameMenu;
                     gameMenuId(gameMenu_i)
                     console.log(Object.keys({i_gameMenu})[0] + ": " + i_gameMenu);
@@ -68,18 +71,18 @@
         };
         function drawGameMenu() {
             const log_drawGameMenu = []
-            document.getElementById("HUD").innerHTML = ""
+            changeText(0, "HUD", "")
             for (let i_drawGameMenu = 1; i_drawGameMenu <= 9; i_drawGameMenu++) {
-                const drawGameMenu_v = gameMenu_i + (Math.pow(10, gameMenu_i.toString().length) * i_drawGameMenu)
-                const v_drawGameMenu = GameMenu.find(e => e.id === drawGameMenu_v);
-                if (v_drawGameMenu) {document.getElementById("HUD").innerHTML += "[" + i_drawGameMenu + "] " + v_drawGameMenu.name};
-                if (v_drawGameMenu?.key) {document.getElementById("HUD").innerHTML += " - " + v_drawGameMenu.key}
-                document.getElementById("HUD").innerHTML += "<br>";
+                const drawGameMenu_v = menu_i + gameMenuIncrease(i_drawGameMenu)
+                const v_drawGameMenu = gameMenuCheck(drawGameMenu_v);
+                if (v_drawGameMenu) {changeText(1, "HUD", "[" + i_drawGameMenu + "] " + v_drawGameMenu.name)};
+                if (v_drawGameMenu?.key) {changeText(1, "HUD", " - " + v_drawGameMenu.key)};
+                changeText(1, "HUD", "<br>");
                 log_drawGameMenu.push(drawGameMenu_v);
             };
             console.log("i_drawGameMenu: " + log_drawGameMenu)
 
-            if (gameMenu_i > 0 && !game_state) {document.getElementById("HUD").innerHTML += "<br>[0] Back"};
+            if (menu_i > 0 && !game_state) {changeText(1, "HUD", "<br>[0] Back")};
         };
 
         window.addEventListener("keydown", function (event) {
