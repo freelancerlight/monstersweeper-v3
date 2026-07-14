@@ -10,7 +10,8 @@
         <title>Monstersweeper</title>
     </head>
     <body id="Main">
-        <p id="Scene"><b>Monstersweeper (v3.0a)</b></p>
+        <p id="Scene">Monstersweeper (v3.0a)</p>
+        <p id="System"><b>@2026 Jie (杰) 3JUMPAB</b></p>
         <p id="HUD">Press "`" to open the game menu.</p>
     </body>
     <script>
@@ -22,6 +23,7 @@
         changeColor(true, "Main", 0);
         changeColor(false, "Scene", 1);
         changeColor(false, "HUD", 3);
+        changeColor(false, "System", 3);
 
         function programLog(programLog_name, programLog_v) {
             let ProgramLog = {}
@@ -38,9 +40,7 @@
                 document.getElementById(changeColor_v).style.color = settings_gameColors[changeColor_i]
                 console.log("[V] Color: " + settings_gameColors[changeColor_i])
             };
-            //console.log("changeColor_background: " + changeColor_background + ", changeColor_v: " + changeColor_v + ", changeColor_i: " + settings_gameColors[changeColor_i]);
             programLog(["changeColor_background", "changeColor_v", "changeColor_i"], [changeColor_background, changeColor_v, changeColor_i])
-            //check which type of color!
         };
 
         function changeText(changeText_type, changeText_name, changeText_v) {
@@ -62,7 +62,7 @@
                 {id:110, name:"Chapter 1", function:function() {level(1)}},
             new gameMenuEmptyObject(20, "Settings"),
                 new gameMenuEmptyObject(120, "Controls"),
-                    //new gameMenuObjectKey(1120, "Move Left", "a"),
+                    //new gameMenuRebindObject(1120, "Move Left"),
                     {id:1120, name:"Move Left", key:"a", function:function() {rebind(this.id)}},
                     {id:2120, name:"Move Right", key:"d", function:function() {rebind(this.id)}},
                     {id:3120, name:"Move Down", key:"s", function:function() {rebind(this.id)}},
@@ -75,25 +75,32 @@
         ];
         console.log(GameMenu)
         function gameMenuIncrease(gameMenuIncrease_v) {return Math.pow(10, menu_i.toString().length) * gameMenuIncrease_v};
-        function gameMenuDecrease() {return Math.pow(10, menu_i.toString().length - 1) * gameMenu_i.toString().charAt(0)};
-        function gameMenuCheck(gameMenuCheck_v) {GameMenu.find(e => e.id === gameMenuCheck_v)}
-        function changeGameMenu() {
-            
+        function gameMenuDecrease() {return Math.pow(10, menu_i.toString().length - 1) * menu_i.toString().charAt(0)};
+        function gameMenuCheck(gameMenuCheck_v) {GameMenu.find(e => e.id === gameMenuCheck_v)};
+        function gameMenuId (_gameMenuI) {
+            const v_gameMenu = GameMenu.find(e => e.id === _gameMenuI);
+            console.log(v_gameMenu)
+            if (v_gameMenu) {v_gameMenu.function()};
         }
-        function gameMenu(gameMenu_i) {
-            if (gameMenu_i == -1) { 
+        function changeGameMenu(changeGameMenu_v) {
+            menu_i += changeGameMenu_v;
+            gameMenuId(menu_i);
+            drawGameMenu();
+        }
+        function gameMenu(gameMenu_v) {
+            if (gameMenu_v == -1) { 
                 menu_i = 0;
-            } else if (gameMenu_i == 0) { 
-                menu_i -= gameMenuDecrease();
+                drawGameMenu();
+            } else if (gameMenu_v == 0) { 
+                changeGameMenu(gameMenuDecrease());
             } else {
-                const i_gameMenu = gameMenuIncrease(gameMenu_i);
-                if (gameMenuCheck(gameMenu_i + i_gameMenu)) {
-                    gameMenu_i += i_gameMenu;
-                    gameMenuId(gameMenu_i)
+                const v_gameMenu = gameMenuIncrease(gameMenu_v);
+                if (gameMenuCheck(gameMenu_v + v_gameMenu)) {
+                    changeGameMenu(v_gameMenu)
+                    console.log("v_gameMenu: " + v_gameMenu)
                 };
             };
-            console.log(Object.keys({menu_i})[0] + ": " + menu_i + ", " + Object.keys({gameMenu_i})[0] + ": " + gameMenu_i);
-            if (!gameMenu_using) {drawGameMenu()};
+            console.log(["menu_i", "gameMenu_v"], [menu_i, v_gameMenu]);
         };
         function drawGameMenu() {
             const log_drawGameMenu = []
@@ -111,25 +118,26 @@
             if (menu_i > 0 && !game_state) {changeText(1, "HUD", "<br>[0] Back")};
         };
 
+        function changeGameState(changeGameState_v) {
+            if (playerKeyCheck("`")) {
+                game_state = changeGameState_v;
+                console.log("game_state: " + game_state);
+
+                changeColor(false, "Scene", 2 - game_state);
+            };
+        }
         window.addEventListener("keydown", function (event) {
             /*Toggle Dev*/ if (playerKeyCheck("=")) {
                 if (dev) {dev = 0} else {dev = 1};
-                console.log("dev" + ": " + dev)
+                console.log("dev" + ": " + dev);
             };
-            function changeGameState(changeGameState_v) {
-                if (playerKeyCheck("`")) {
-                    game_state = changeGameState_v;
-                    console.log("game_state: " + game_state);
-                    
-                    changeColor(false, "Scene", 2 - game_state);
-                };
-            }
             if (game_state) {
                 changeGameState(0)
             } else {
                 changeGameState(1);
-                
+                if (Number(event.key) || event.key == 0) {gameMenu(Number(event.key))};
             };
+            console.log("Player Key: " + event.key);
         });
     </script>
 </html>
