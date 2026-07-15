@@ -84,9 +84,8 @@
             if (gameMenuCheck(menu_i)) {gameMenuCheck(menu_i).function()};
             drawGameMenu();
         }
-        function gameMenu(gameMenu_v) {if (gameMenu_v == -1) {menu_i = 0; drawGameMenu()} else if (gameMenu_v == 0) {changeGameMenu(-gameMenuDecrease())} else {if (gameMenuCheck(menu_i + gameMenuIncrease(gameMenu_v))) {changeGameMenu(gameMenuIncrease(gameMenu_v))}}};
+        function gameMenu(gameMenu_v) {if (gameMenu_v == -1) {changeGameMenu(-gameMenuDecrease())} else if (gameMenu_v == 0) {changeText(0, "HUD", "")} else if (gameMenuCheck(menu_i + gameMenuIncrease(gameMenu_v))) {changeGameMenu(gameMenuIncrease(gameMenu_v))} else {drawGameMenu()}};
         function drawGameMenu() {
-            //Please add system text
             if (!gameMenu_using) {
                 changeText(0, "HUD", "")
                 for (let i_drawGameMenu = 1; i_drawGameMenu <= 9; i_drawGameMenu++) {
@@ -102,8 +101,8 @@
         function changeGameState(changeGameState_v) {
             if (playerKeyCheck("`")) {
                 game_state = changeGameState_v;
-                if (!game_state) {gameMenu(-1)} else {changeText(0, "System", "")};
-
+                if (!game_state) {menu_i = 0; gameMenu()} else {gameMenu(0)};
+                changeText(0, "System", "");
                 //changeColor(false, "Scene", 2 - game_state);
             };
         }
@@ -113,8 +112,16 @@
                 changeGameState(0);
             } else {
                 changeGameState(1);
-                if (Number(event.key) || event.key == 0) {gameMenu(Number(event.key))};
+                if (event.key == 0) {gameMenu(-1)} else if (Number(event.key)) {gameMenu(Number(event.key))};
             };
         });
+
+        function game_pause() {clearInterval(game_clock); gameMenu(-1)}
+        function gameResume() {if (Game.state) {game_state = 1; game_clock = setInterval(game_update, 20); changeText(0, "HUD", "")}};
+        function game_update() {
+            if (game_state) {
+                
+            }
+        }
     </script>
 </html>
