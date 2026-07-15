@@ -4,7 +4,6 @@
         <style>
             #Scene {
                 font-family: "Courier New", Courier, monospace;
-                
             }
         </style>
         <title>Monstersweeper</title>
@@ -14,12 +13,17 @@
         <p id="HUD">Press "`" to open the game menu.</p>
     </body>
     <script>
-        //Please polish this in next development
+        //Please polish this in next development.
         let dev = 0, game_state = 1, menu_i = 0, gameMenu_using = false;
+
+        function defaultSettings() {
+            settings_playerControls.push(...default_playerControls)
+        }
+        function changeSetting(changeSetting_name, changeSetting_v) {localStorage.setItem(changeSetting_name, changeSetting_v)};
+        
         const default_playerControls = ["a", "d", "s", "w", "o", "[", "k", "p"]
         const settings_playerControls = []
         if (localStorage.playerControls !== null && localStorage.playerControls !== undefined) {settings_playerControls.push(...JSON.parse(localStorage.playerControls))} else {settings_playerControls.push(...default_playerControls)};
-        console.log(settings_playerControls)
         const settings_gameBackgroundColors = ["#000000", "#606060", null, "#404040"];
         const settings_gameColors = [null, "#ffffff", "#808080", "#ffffff"];
 
@@ -46,8 +50,7 @@
         function rebind(rebind_id) {
             function bind(event) {
                 settings_playerControls[rebind_id] = event.key;
-                localStorage.playerControls = JSON.stringify(settings_playerControls);
-                console.log(localStorage.playerControls)
+                changeSetting("playerControls", JSON.stringify(settings_playerControls))
                 window.removeEventListener("keydown", bind);
                 gameMenu_using = false
                 changeGameMenu(-gameMenuDecrease())
@@ -81,6 +84,7 @@
         }
         function gameMenu(gameMenu_v) {if (gameMenu_v == -1) {menu_i = 0; drawGameMenu()} else if (gameMenu_v == 0) {changeGameMenu(-gameMenuDecrease())} else {if (gameMenuCheck(menu_i + gameMenuIncrease(gameMenu_v))) {changeGameMenu(gameMenuIncrease(gameMenu_v))}}};
         function drawGameMenu() {
+            //Please add system text
             if (!gameMenu_using) {
                 changeText(0, "HUD", "")
                 for (let i_drawGameMenu = 1; i_drawGameMenu <= 9; i_drawGameMenu++) {
@@ -102,7 +106,7 @@
             };
         }
         window.addEventListener("keydown", function (event) {
-            /*Toggle Dev*/ if (playerKeyCheck("=")) {if (dev) {dev = 0} else {dev = 1}};
+            if (playerKeyCheck("=")) {if (dev) {dev = 0} else {dev = 1}};
             if (game_state) {
                 changeGameState(0)
             } else {
