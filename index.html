@@ -9,17 +9,14 @@
         <title>Monstersweeper</title>
     </head>
     <body id="Main">
-        <p id="Scene">Monstersweeper (v3.0a)</p>
-        <p id="System"></p>
+        <p id="Scene">Monstersweeper (V3)</p>
+        <p id="System">🄯2026 Jie (杰) 3JUMPAB</p>
         <p id="HUD">Press "`" to open the game menu.</p>
     </body>
     <script>
-        //Please polish this in next development.
         let dev = 0, game_state = 1, menu_i = 0, gameMenu_using = false;
 
-        function defaultSettings() {
-            settings_playerControls.push(...default_playerControls)
-        }
+        //function defaultSettings() {settings_playerControls.push(...default_playerControls)};
         function changeSetting(changeSetting_name, changeSetting_v) {localStorage.setItem(changeSetting_name, changeSetting_v)};
         
         const default_playerControls = ["a", "d", "s", "w", "o", "[", "k", "p"]
@@ -28,10 +25,11 @@
         const settings_gameBackgroundColors = ["#000000", "#606060", null, "#404040", null, "#ffffff"];
         const settings_gameColors = [null, "#ffffff", "#808080", "#ffffff"];
 
-        changeColor(true, "Main", 0);
+        /*changeColor(true, "Main", 0);
         changeColor(false, "Scene", 1);
-        changeColor(false, "HUD", 3);
-        changeColor(true, "System", 5)
+        changeColor(false, "HUD", 3);*/
+        changeColor(true, "System", 0);
+        changeColor(false, "System", 1);
         
         function playerKeyCheck(playerKeyCheck_key) {if (event.key == playerKeyCheck_key) {return true} else {return false}};
         function changeColor(changeColor_background, changeColor_v, changeColor_i) {if (changeColor_background) {document.getElementById(changeColor_v).style.backgroundColor = settings_gameBackgroundColors[changeColor_i]} else {document.getElementById(changeColor_v).style.color = settings_gameColors[changeColor_i]}};
@@ -106,7 +104,7 @@
                 game_state = changeGameState_v;
                 if (!game_state) {gameMenu(-1)} else {changeText(0, "System", "")};
 
-                changeColor(false, "Scene", 2 - game_state);
+                //changeColor(false, "Scene", 2 - game_state);
             };
         }
         window.addEventListener("keydown", function (event) {
