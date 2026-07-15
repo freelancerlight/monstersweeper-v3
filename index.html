@@ -10,6 +10,7 @@
     </head>
     <body id="Main">
         <p id="Scene">Monstersweeper (v3.0a)</p>
+        <p id="System"></p>
         <p id="HUD">Press "`" to open the game menu.</p>
     </body>
     <script>
@@ -24,12 +25,13 @@
         const default_playerControls = ["a", "d", "s", "w", "o", "[", "k", "p"]
         const settings_playerControls = []
         if (localStorage.playerControls !== null && localStorage.playerControls !== undefined) {settings_playerControls.push(...JSON.parse(localStorage.playerControls))} else {settings_playerControls.push(...default_playerControls)};
-        const settings_gameBackgroundColors = ["#000000", "#606060", null, "#404040"];
+        const settings_gameBackgroundColors = ["#000000", "#606060", null, "#404040", null, "#ffffff"];
         const settings_gameColors = [null, "#ffffff", "#808080", "#ffffff"];
 
         changeColor(true, "Main", 0);
         changeColor(false, "Scene", 1);
         changeColor(false, "HUD", 3);
+        changeColor(true, "System", 5)
         
         function playerKeyCheck(playerKeyCheck_key) {if (event.key == playerKeyCheck_key) {return true} else {return false}};
         function changeColor(changeColor_background, changeColor_v, changeColor_i) {if (changeColor_background) {document.getElementById(changeColor_v).style.backgroundColor = settings_gameBackgroundColors[changeColor_i]} else {document.getElementById(changeColor_v).style.color = settings_gameColors[changeColor_i]}};
@@ -50,6 +52,7 @@
         function rebind(rebind_id) {
             function bind(event) {
                 settings_playerControls[rebind_id] = event.key;
+                changeText(0, "System", "Control Rebinded: " + event.key);
                 changeSetting("playerControls", JSON.stringify(settings_playerControls))
                 window.removeEventListener("keydown", bind);
                 gameMenu_using = false
@@ -57,7 +60,8 @@
             };
             window.addEventListener("keydown", bind);
             gameMenu_using = true;
-            changeText(0, "HUD", "'Press any key to rebind selected key'");
+            changeText(0, "HUD", "");
+            changeText(0, "System", "'Press any key to rebind selected key'");
         };
         const GameMenu = [
             new gameMenuEmptyObject(10, "New Game"),
@@ -100,7 +104,7 @@
         function changeGameState(changeGameState_v) {
             if (playerKeyCheck("`")) {
                 game_state = changeGameState_v;
-                if (!game_state) {gameMenu(-1)}
+                if (!game_state) {gameMenu(-1)} else {changeText(0, "System", "")};
 
                 changeColor(false, "Scene", 2 - game_state);
             };
@@ -108,7 +112,7 @@
         window.addEventListener("keydown", function (event) {
             if (playerKeyCheck("=")) {if (dev) {dev = 0} else {dev = 1}};
             if (game_state) {
-                changeGameState(0)
+                changeGameState(0);
             } else {
                 changeGameState(1);
                 if (Number(event.key) || event.key == 0) {gameMenu(Number(event.key))};
