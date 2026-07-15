@@ -11,19 +11,21 @@
     </head>
     <body id="Main">
         <p id="Scene">Monstersweeper (v3.0a)</p>
-        <p id="System"><b>@2026 Jie (杰) 3JUMPAB</b></p>
         <p id="HUD">Press "`" to open the game menu.</p>
     </body>
     <script>
+        //Please polish this in next development
         let dev = 0, game_state = 1, menu_i = 0, gameMenu_using = false;
-        const settings_playerControls = ["a", "d", "s", "w", "o", "[", "k", "p"];
+        const default_playerControls = ["a", "d", "s", "w", "o", "[", "k", "p"]
+        const settings_playerControls = []
+        if (localStorage.playerControls !== null && localStorage.playerControls !== undefined) {settings_playerControls.push(...JSON.parse(localStorage.playerControls))} else {settings_playerControls.push(...default_playerControls)};
+        console.log(settings_playerControls)
         const settings_gameBackgroundColors = ["#000000", "#606060", null, "#404040"];
         const settings_gameColors = [null, "#ffffff", "#808080", "#ffffff"];
 
         changeColor(true, "Main", 0);
         changeColor(false, "Scene", 1);
         changeColor(false, "HUD", 3);
-        changeColor(false, "System", 3);
         
         function playerKeyCheck(playerKeyCheck_key) {if (event.key == playerKeyCheck_key) {return true} else {return false}};
         function changeColor(changeColor_background, changeColor_v, changeColor_i) {if (changeColor_background) {document.getElementById(changeColor_v).style.backgroundColor = settings_gameBackgroundColors[changeColor_i]} else {document.getElementById(changeColor_v).style.color = settings_gameColors[changeColor_i]}};
@@ -44,6 +46,8 @@
         function rebind(rebind_id) {
             function bind(event) {
                 settings_playerControls[rebind_id] = event.key;
+                localStorage.playerControls = JSON.stringify(settings_playerControls);
+                console.log(localStorage.playerControls)
                 window.removeEventListener("keydown", bind);
                 gameMenu_using = false
                 changeGameMenu(-gameMenuDecrease())
@@ -65,14 +69,7 @@
                     new gameMenuRebindObject(6120, "Use Tool Right", 5),
                     new gameMenuRebindObject(7120, "Use Tool Down", 6),
                     new gameMenuRebindObject(8120, "Use Tool Up", 7),
-                    {id:2120, name:"Move Right", key:"d", function:function() {rebind(this.id)}},
-                    {id:3120, name:"Move Down", key:"s", function:function() {rebind(this.id)}},
-                    {id:4120, name:"Move Up", key:"w", function:function() {rebind(this.id)}},
-                    {id:5120, name:"Use Tool Left", key:"o", function:function() {rebind(this.id)}},
-                    {id:6120, name:"Use Tool Right", key:"[", function:function() {rebind(this.id)}},
-                    {id:7120, name:"Use Tool Down", key:"k", function:function() {rebind(this.id)}},
-                    {id:8120, name:"Use Tool Up", key:"p", function:function() {rebind(this.id)}},
-                {id:920, name:"Delete Settings Data", function:function() {localStorage.removeItem(Settings)}}
+                {id:920, name:"Delete Settings Data", function:function() {localStorage.clear(); settings_playerControls.splice(0, settings_playerControls.length); settings_playerControls.push(...default_playerControls)}}
         ];
         function gameMenuIncrease(gameMenuIncrease_v) {return Math.pow(10, menu_i.toString().length) * gameMenuIncrease_v};
         function gameMenuDecrease() {return Math.pow(10, menu_i.toString().length - 1) * menu_i.toString().charAt(0)};
