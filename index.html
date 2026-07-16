@@ -38,7 +38,21 @@
 
         let Game = {}
         function game(game_mapXSize, game_mapYSize, game_playerMapI, game_diggeds, game_monsters, game_ores) {
+            let game_array = []
             Game = {state:1, map_xSize:game_mapXSize, map_ySize:game_mapYSize, map_l:game_mapXSize * game_mapYSize, ore_diggeds:[], projectiles:[]};
+
+            function gameArrayPush(gameArrayPush_v) {game_array.push(gameArrayPush_v)}
+
+            //Generate Map Borders
+            for (let i = 1; i <= Game.map_xSize; i++) {
+                game_array.push(i);
+                game_array.push(Game.map_iL - i + 1);
+            };
+            for (let i = 1; i <= Game.map_ySize - 2; i++) {
+                game_array.push(1 + Game.map_xSize * i);
+                game_array.push(Game.map_xSize * (1 + i));
+            };
+            Game.map_borders = game_array;
         }
         
         function gameMenuEmptyObject(gameMenuEmptyObject_id, gameMenuEmptyObject_name) {
