@@ -35,6 +35,11 @@
         function changeColor(changeColor_background, changeColor_v, changeColor_i) {if (changeColor_background) {document.getElementById(changeColor_v).style.backgroundColor = settings_gameBackgroundColors[changeColor_i]} else {document.getElementById(changeColor_v).style.color = settings_gameColors[changeColor_i]}};
 
         function changeText(changeText_type, changeText_name, changeText_v) {if (changeText_type) {document.getElementById(changeText_name).innerHTML += changeText_v} else {document.getElementById(changeText_name).innerHTML = changeText_v}};
+
+        let Game = {}
+        function game(game_mapXSize, game_mapYSize, game_playerMapI, game_diggeds, game_monsters, game_ores) {
+            Game = {state:1, map_xSize:game_mapXSize, map_ySize:game_mapYSize, map_l:game_mapXSize * game_mapYSize, ore_diggeds:[], projectiles:[]};
+        }
         
         function gameMenuEmptyObject(gameMenuEmptyObject_id, gameMenuEmptyObject_name) {
             this.id = gameMenuEmptyObject_id;
@@ -101,7 +106,7 @@
         function changeGameState(changeGameState_v) {
             if (playerKeyCheck("`")) {
                 game_state = changeGameState_v;
-                if (!game_state) {menu_i = 0; gameMenu()} else {gameMenu(0)};
+                if (!game_state) {menu_i = 0; gameMenu()} else {gamePause(0)};
                 changeText(0, "System", "");
                 //changeColor(false, "Scene", 2 - game_state);
             };
@@ -116,12 +121,13 @@
             };
         });
 
-        function game_pause() {clearInterval(game_clock); gameMenu(-1)}
+        function gamePause() {if (typeof game_clock !== "undefined") {clearInterval(game_clock)}; gameMenu(0)}
         function gameResume() {if (Game.state) {game_state = 1; game_clock = setInterval(game_update, 20); changeText(0, "HUD", "")}};
-        function game_update() {
+        function gameUpdate() {
             if (game_state) {
-                
-            }
-        }
+                changeText(0, "Scene", "");
+                for (let i_scene = 1, ix_scene = 0; scene_i <= Game.map_iL; scene_i++) {}
+            };
+        };
     </script>
 </html>
